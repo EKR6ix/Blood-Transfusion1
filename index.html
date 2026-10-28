@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="km">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>វិញ្ញាសាអនុវត្តឈាមវិទ្យា៖ វិភាគករណីគ្លីនិក & មន្ទីរពិសោធន៍ (Hematopoiesis, Erythropoiesis, Iron, Hb & RBC Metabolism) - ថ្នាក់ BSL ឆ្នាំទី១</title>
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b1120;
+  --card: #15203b;
+  --card-border: #1e293b;
+  --primary: #38bdf8;
+  --primary-hover: #0284c7;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent: #f59e0b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', 'Inter', system-ui, sans-serif; }
+body { background: var(--bg); color: var(--text); min-height: 100vh; padding: 16px; display: flex; flex-direction: column; align-items: center; }
+.wrap { width: 100%; max-width: 820px; margin: 0 auto; }
+header.hero { text-align: center; margin-bottom: 20px; }
+.hero h1 { font-size: 1.32rem; color: var(--primary); margin-bottom: 6px; line-height: 1.45; }
+.hero p { color: var(--text-muted); font-size: 0.88rem; }
+.card { background: var(--card); border: 1px solid var(--card-border); border-radius: 14px; padding: 22px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+.status-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--card-border); font-size: 0.88rem; }
+.badge { background: #0369a1; color: #bae6fd; padding: 4px 10px; border-radius: 9999px; font-weight: 600; font-size: 0.75rem; }
+.timer-box { font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 6px; font-size: 1.05rem; }
+.timer-box.urgent { color: var(--danger); }
+.question-title { font-size: 1.05rem; line-height: 1.6; font-weight: 600; margin-bottom: 14px; color: var(--text); }
+.diagram-box { display: flex; justify-content: center; align-items: center; background: #080e1e; border: 1px solid #1e3a8a; border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+.options-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.option-btn { background: #0b1120; border: 1px solid var(--card-border); color: var(--text); padding: 14px 16px; border-radius: 10px; text-align: left; font-size: 0.94rem; cursor: pointer; transition: all 0.15s ease; line-height: 1.5; display: flex; align-items: flex-start; gap: 10px; }
+.option-btn:hover:not(:disabled) { border-color: var(--primary); background: #1a253c; }
+.option-btn:disabled { cursor: default; }
+.option-btn.correct { background: rgba(34, 197, 94, 0.22) !important; border-color: var(--success) !important; color: #86efac; font-weight: 600; }
+.option-btn.wrong { background: rgba(239, 68, 68, 0.22) !important; border-color: var(--danger) !important; color: #fca5a5; }
+.letter { font-weight: 700; color: var(--primary); font-size: 1.05rem; min-width: 25px; }
+.hint-section { margin-bottom: 16px; }
+.hint-btn { background: none; border: none; color: var(--accent); font-size: 0.88rem; cursor: pointer; text-decoration: underline; padding: 0; }
+.hint-content { display: none; margin-top: 8px; background: rgba(245, 158, 11, 0.12); border-left: 3px solid var(--accent); padding: 10px 14px; border-radius: 4px; font-size: 0.88rem; color: #fde68a; line-height: 1.5; }
+.feedback-box { display: none; background: #0d1a33; border: 1px solid #2563eb; border-radius: 10px; padding: 16px; margin-bottom: 16px; line-height: 1.5; font-size: 0.9rem; }
+.feedback-box h4 { margin-bottom: 8px; color: #93c5fd; font-size: 0.95rem; }
+.controls { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.action-btn { background: var(--primary); color: #090d16; border: none; padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 0.92rem; cursor: pointer; transition: background 0.15s; }
+.action-btn:hover { background: var(--primary-hover); }
+.action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.progress-wrap { margin-top: 20px; }
+.progress-bar-bg { background: #1e293b; height: 8px; border-radius: 9999px; overflow: hidden; }
+.progress-bar-fill { background: var(--primary); height: 100%; width: 4.34%; transition: width 0.3s; }
+.final-screen { display: none; text-align: center; padding: 36px 12px; }
+.final-score { font-size: 3rem; font-weight: 800; color: var(--primary); margin: 16px 0; }
+.review-list { margin-top: 20px; text-align: left; }
+.review-item { border: 1px solid var(--card-border); border-radius: 8px; padding: 12px; margin-bottom: 10px; background: #0b1120; font-size: 0.88rem; }
+.review-item summary { cursor: pointer; font-weight: 700; color: var(--primary); }
+.review-item p { margin-top: 6px; color: #cbd5e1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1>វិញ្ញាសាអនុវត្តឈាមវិទ្យា៖ វិភាគករណីគ្លីនិក & មន្ទីរពិសោធន៍ (Hematopoiesis, Erythropoiesis, Metabolism of Iron, Hemoglobin Function, RBC Membrane & Metabolism)</h1>
+    <p>ផ្អែកលើស្លាយមេរៀនសាស្ត្រាចារ្យ Sareth Sokhom • ២៣ សំណួរ Higher-Order Bloom • ចៃដន្យ (Shuffle) • ៦០ វិនាទី</p>
+  </header>
+
+  <div class="card" id="quizCard">
+    <div class="status-bar">
+      <span class="badge" id="topicBadge">មេរៀន</span>
+      <span id="qCount" style="font-weight:600;">សំណួរទី 1 នៃ 23</span>
+      <div class="timer-box" id="timerBox">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="timerText">60s</span>
+      </div>
+    </div>
+
+    <div id="diagramContainer" class="diagram-box"></div>
+
+    <div class="question-title" id="questionTitle"></div>
+
+    <div class="hint-section">
+      <button class="hint-btn" id="hintToggleBtn" onclick="toggleHint()">💡 បង្ហាញតម្រុយគ្លីនិក (Show Hint)</button>
+      <div class="hint-content" id="hintContent"></div>
+    </div>
+
+    <div class="options-grid" id="optionsGrid"></div>
+
+    <div class="feedback-box" id="feedbackBox">
+      <h4>ការពន្យល់លម្អិតក្នុងមន្ទីរពិសោធន៍ (Lab Rationale):</h4>
+      <div id="feedbackText"></div>
+    </div>
+
+    <div class="controls">
+      <span style="font-size:0.88rem; color:var(--text-muted);" id="liveScore">ពិន្ទុ: 0 / 0</span>
+      <button class="action-btn" id="nextBtn" onclick="nextQuestion()" disabled>សំណួរបន្ទាប់ →</button>
+    </div>
+  </div>
+
+  <div class="card final-screen" id="finalCard">
+    <h2>បញ្ចប់ការធ្វើតេស្ត!</h2>
+    <p style="margin-top:8px; color:var(--text-muted);">អ្នកបានឆ្លងកាត់ការអនុវត្តវិញ្ញាសាវិភាគករណីគ្លីនិកឈាមវិទ្យា ២៣ សំណួររួចរាល់ហើយ។</p>
+    <div class="final-score" id="finalScoreVal">0%</div>
+    <p id="finalFeedback" style="margin-bottom: 24px; color: #cbd5e1; font-size:1.02rem; line-height:1.6;"></p>
+    <button class="action-btn" onclick="initQuiz()">ធ្វើវិញ្ញាសាសាឡើងវិញ (Shuffle ថ្មី)</button>
+    <div class="review-list" id="reviewContainer"></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const rawQuestions = [
+  {
+    topic: "CBC Correlation — Rule of Three [Analyze/Evaluate]",
+    title: "ម៉ាស៊ីនស្វ័យប្រវត្តិ CBC បញ្ចេញលទ្ធផល៖ RBC = 4.0 x 10^12/L, Hgb = 12.0 g/dL, Hct = 45%។ ផ្អែកលើរូបមន្ត Rule of Three របស់សាស្ត្រាចារ្យ Sareth Sokhom តើអ្នកបច្ចេកទេសគួរវាយតម្លៃ និងចាត់វិធានការបែបណា?",
+    hint: "ផ្ទៀងផ្ទាត់ Hgb x 3 = Hct +/- 3% (12 x 3 = 36% ខុសគ្នាឆ្ងាយពី 45%)។",
+    options: [
+      { text: "លទ្ធផលខុសប្រក្រតី មិនផ្ទៀងផ្ទាត់ Rule of Three ត្រូវត្រួតពិនិត្យគំរូឈាមរក Lipemia/Cold agglutinin", isCorrect: true },
+      { text: "លទ្ធផលត្រឹមត្រូវល្អឥតខ្ចោះ អាចបញ្ជូនទៅគ្រូពេទ្យព្យាបាលភ្លាមៗដោយមិនបាច់ផ្ទៀងផ្ទាត់", isCorrect: false },
+      { text: "ត្រូវចែក Hct នឹង 10 ដើម្បីទទួលបានតម្លៃប្លាកែតពិតប្រាកដមុនចេញលទ្ធផល", isCorrect: false },
+      { text: "ជាករណីធម្មតា ព្រោះ RBC គុណនឹង ៣ មិនដែលពាក់ព័ន្ធនឹងកម្រិតអេម៉ូក្លូប៊ីនឡើយ", isCorrect: false }
+    ],
+    rationale: "តាម Rule of Three: Hgb x 3 ត្រូវតែស្មើ Hct +/- 3%។ ទីនេះ 12.0 x 3 = 36% ចំណែក Hct បែរជា 45% (ខុសគ្នាដល់ 9%) ដូច្នេះមិនឆ្លងកាត់ Correlation check ឡើយ។ មូលហេតុអាចមកពីកំហុសបច្ចេកទេស សារធាតុរំខាន (Lipemia, Hemolysis) ឬ Cold agglutinins ដែលតម្រូវឱ្យអ្នកបច្ចេកទេសត្រួតពិនិត្យឡើងវិញជាបន្ទាន់។"
+  },
+  {
+    topic: "Metabolism of Iron — Absorption [Analyze]",
+    title: "អ្នកជំងឺម្នាក់មានដំបៅក្រពះ ហើយលេបថ្នាំទប់ជាតិអាស៊ីតក្រពះ (Antacids / PPI) រយៈពេលយូរ បណ្តាលឱ្យកម្រិតអាស៊ីតក្រពះធ្លាក់ចុះខ្លាំង (Achlorhydria)។ ហេតុអ្វីបានជាអ្នកជំងឺនេះប្រឈមនឹងការខ្វះជាតិដែក?",
+    hint: "ជាតិដែក Fe3+ ត្រូវបំប្លែងទៅជា Fe2+ ដោយអាស៊ីតក្រពះ ទើបស្រូបនៅ Duodenum បាន។",
+    svg: `<svg width="220" height="85" viewBox="0 0 220 85"><rect x="30" y="25" width="60" height="35" rx="6" fill="#1e293b" stroke="#ef4444" stroke-width="2"/><text x="60" y="46" fill="#ef4444" font-size="11" text-anchor="middle">Fe3+ (Ferric)</text><path d="M 95,42 L 125,42" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow)"/><rect x="130" y="25" width="60" height="35" rx="6" fill="#1e293b" stroke="#22c55e" stroke-width="2"/><text x="160" y="46" fill="#22c55e" font-size="11" text-anchor="middle">Fe2+ (Ferrous)</text><text x="110" y="20" fill="#f59e0b" font-size="9" text-anchor="middle">Gastric Acid (HCl)</text><text x="110" y="75" fill="#94a3b8" font-size="8" text-anchor="middle">Required for Duodenal Uptake</text></svg>`,
+    options: [
+      { text: "ព្រោះអាស៊ីតក្រពះចាំបាច់សម្រាប់បំប្លែង Fe3+ ទៅជា Fe2+ ទើបស្រូបនៅ Duodenum បាន", isCorrect: true },
+      { text: "ព្រោះកង្វះអាស៊ីតក្រពះបំផ្លាញម៉ូលេគុល Transferrin ក្នុងខួរឆ្អឹងភ្លាមៗ", isCorrect: false },
+      { text: "ព្រោះ Fe2+ មិនអាចរលាយបានក្នុងមជ្ឈដ្ឋានអាស៊ីតនៃបំពង់រំលាយអាហារ", isCorrect: false },
+      { text: "ព្រោះជាតិដែកទាំងអស់ត្រូវបត់បែនបញ្ចេញចោលតាមផ្លូវទឹកប្រមាត់តែប៉ុណ្ណោះ", isCorrect: false }
+    ],
+    rationale: "យោងតាមស្លាយមេរៀន៖ ដែកក្នុងអាហារភាគច្រើនជា Fe3+ (Ferric)។ អាស៊ីតក្រពះដើរតួនាទីយ៉ាងសំខាន់ក្នុងការ Reduction ដែក Fe3+ ទៅជា Fe2+ (Ferrous) ដែលជាទម្រង់តែមួយគត់ដែលអាចបឺតស្រូបកាត់តាមកោសិកា Duodenum និង Jejunum។ កង្វះអាស៊ីតក្រពះធ្វើឱ្យរារាំងការបំប្លែងនេះ។"
+  },
+  {
+    topic: "RBC Membrane — Lipid Bilayer [Analyze]",
+    title: "លើឈាមស្តើងរបស់អ្នកជំងឺក្រិនថ្លើមរ៉ាំរ៉ៃ (Cirrhosis) អ្នកបច្ចេកទេសសង្កេតឃើញគោលិកាក្រហមមានបន្លាស្រួចៗមិនស្មើគ្នា (Acanthocytes)។ ផ្អែកលើមេរៀន RBC Membrane តើបាតុភូតជីវគីមីណាដែលបង្កឱ្យមានរូបរាងនេះ?",
+    hint: "កូលេស្តេរ៉ុលកកកុញមិនប្រក្រតីលើស្រទាប់ Outer lipid bilayer។",
+    options: [
+      { text: "ការកកកុញកូលេស្តេរ៉ុលប្លាស្មាលើសលប់លើស្រទាប់ក្រៅនៃ Lipid bilayer នៃភ្នាស RBC", isCorrect: true },
+      { text: "ការដាច់រលាត់សរសៃ Spectrin ទាំងស្រុងនៅក្នុងប្រហោងណៃយូកោសិកា", isCorrect: false },
+      { text: "ការកង្វះអំបិលខនិជប៉ូតាស្យូម (K+) ក្នុងចរន្តឈាមក្រៅស្រួចស្រាវ", isCorrect: false },
+      { text: "ការថយចុះជាតិខ្លាញ់ Phospholipids ដល់កម្រិតសូន្យក្នុងសរសៃឈាម", isCorrect: false }
+    ],
+    rationale: "ស្លាយមេរៀន RBC Membrane បញ្ជាក់ថា៖ កូលេស្តេរ៉ុលក្នុងប្លាស្មានិងភ្នាសស្ថិតក្នុងការផ្លាស់ប្តូរឥតឈប់ឈរ។ ក្នុងជំងឺថ្លើម ឬកង្វះ LCAT កូលេស្តេរ៉ុលប្រមូលផ្តុំលើសលប់លើស្រទាប់ខាងក្រៅនៃ Lipid bilayer បណ្តាលឱ្យភ្នាសកោសិកាក្រហមក្លាយជាធ្ងន់ ក្រាស់ និងខូចទ្រង់ទ្រាយជារូបរាង Acanthocytes និង Target cells។"
+  },
+  {
+    topic: "RBC Metabolism — HMP Shunt & G6PD [Analyze]",
+    title: "អ្នកជំងឺប្រុសម្នាក់ខ្វះអង់ស៊ីម G6PD ក្រោយលេបថ្នាំប្រឆាំងគ្រុនចាញ់ កើតមានការបែកគ្រាប់ឈាមស្រួចស្រាវ។ លើគំនាសឈាមឃើញ Heinz bodies និង Bite cells។ តើដំណើរការខូចខាតប្រព្រឹត្តទៅតាមយន្តការណា?",
+    hint: "Hexose monophosphate shunt មិនអាចផលិត NADPH ទប់ទល់នឹង H2O2។",
+    svg: `<svg width="220" height="85" viewBox="0 0 220 85"><ellipse cx="110" cy="42" rx="40" ry="26" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/><circle cx="135" cy="35" r="8" fill="#ef4444"/><path d="M 130,22 Q 155,42 130,62 Z" fill="#0b1120"/><text x="95" y="46" fill="#f8fafc" font-size="9" text-anchor="middle">RBC</text><text x="140" y="80" fill="#f59e0b" font-size="8" text-anchor="middle">Bite Cell (Spleen pitting)</text></svg>`,
+    options: [
+      { text: "កង្វះ HMP shunt ធ្វើឱ្យខ្វះ NADPH មិនអាចការពារ Globin ពី H2O2 នាំឱ្យកកជា Heinz bodies", isCorrect: true },
+      { text: "កង្វះ ATP ពី Embden-Meyerhof pathway ធ្វើឱ្យកោសិកាហើមបែកភ្លាមៗ", isCorrect: false },
+      { text: "ការកើនឡើងនៃ Methemoglobin reductase ធ្វើឱ្យដែក Fe2+ ក្លាយជា Fe3+", isCorrect: false },
+      { text: "ការបាត់បង់ជាតិស្ករ Galactose ពីខ្សែច្រវាក់កាបូអ៊ីដ្រាតលើ Glycophorin A", isCorrect: false }
+    ],
+    rationale: "Hexose monophosphate (HMP) shunt ផលិត NADPH ដើម្បីបន្សាបជាតិពុលអុកស៊ីតកម្ម H2O2។ បើខ្វះផ្លូវនេះ (G6PD deficiency) ខ្សែច្រវាក់ Globin ត្រូវរងការកត់ស៊ីតកម្មរហូតដល់ធ្លាក់កករក្លាយជា Heinz body inclusions។ ពេលឆ្លងកាត់អណ្តើក អណ្តើកខាំត្របាក់ដក Heinz body ចេញ បង្កើតបានជារូបរាង Bite cells។"
+  },
+  {
+    topic: "Vit B12 & Folate — DNA Synthesis [Analyze]",
+    title: "អ្នកជំងឺស្រីបួសតឹងរ៉ឹងច្រើនឆ្នាំ ខ្វះវីតាមីន B12 ធ្ងន់ធ្ងរ។ ក្នុងខួរឆ្អឹងឃើញ Megaloblasts ដែលមានបាតុភូត Nuclear-cytoplasmic asynchrony។ ផ្អែកលើជីវគីមីនៃមេរៀន តើម៉ូលេគុលណាដែលចូលទៅជំនួស TTP បណ្តាលឱ្យបែកបាក់ណៃយូ?",
+    hint: "កង្វះ B12 ធ្វើឱ្យខ្វះ TTP ហើយ DTP ចូលមកជំនួសបណ្តាលឱ្យ Nuclear fragmentation។",
+    options: [
+      { text: "Deoxyuridine triphosphate (DTP) ចូលជំនួស TTP បណ្តាលឱ្យបែកបាក់ណៃយូ (Nuclear fragmentation)", isCorrect: true },
+      { text: "Adenosine triphosphate (ATP) ចូលជំនួស RNA បណ្តាលឱ្យកោសិកាមិនព្រមបែងចែក", isCorrect: false },
+      { text: "Succinyl CoA ចូលជំនួស Glycine ក្នុងមីតូកុងឌ្រីបណ្តាលឱ្យស្ទះការសំយោគ Globin", isCorrect: false },
+      { text: "2,3-DPG ជ្រាបចូលទៅបំផ្លាញរចនាសម្ព័ន្ធក្រូម៉ូសូមគូទី ១១ ទាំងស្រុង", isCorrect: false }
+    ],
+    rationale: "យោងតាមស្លាយមេរៀន៖ ការសំយោគ DNA ត្រូវការ TTP (Thymidine triphosphate) ដែលពឹងផ្អែកលើការផ្ទេរ Methyl group ពី Vit B12 និង Folic acid។ កាលណាខ្វះ Vit B12/Folate ម៉ូលេគុល Deoxyuridine triphosphate (DTP) នឹងចូលទៅជំនួសកន្លែង TTP ដែលជាហេតុបណ្តាលឱ្យបែកបាក់ណៃយូ (Nuclear fragmentation) និងយឺតយ៉ាវការលូតលាស់ណៃយូ។"
+  },
+  {
+    topic: "Hemoglobin Function — 2,3-DPG [Evaluate]",
+    title: "ឈាមស្តុកក្នុងធនាគារឈាម (Blood Bank) រយៈពេលយូរ មានការថយចុះយ៉ាងខ្លាំងនូវកំហាប់ 2,3-DPG។ ប្រសិនបើបញ្ចូលឈាមនេះទៅអ្នកជំងឺ តើនឹងមានផលប៉ះពាល់អ្វីដល់ការបញ្ចេញអុកស៊ីសែនទៅជាលិកា?",
+    hint: "2,3-DPG ជួយបន្ធូរចំណងដើម្បីបញ្ចេញ O2; បើខ្វះវា អេម៉ូក្លូប៊ីនក្រាញចាប់ O2 មិនព្រមព្រលែង (Shift to left)។",
+    options: [
+      { text: "អេម៉ូក្លូប៊ីនចាប់អុកស៊ីសែនស្អិតខ្លាំង មិនព្រមបញ្ចេញទៅជាលិកា (Affinity ខ្ពស់ពេក)", isCorrect: true },
+      { text: "អេម៉ូក្លូប៊ីនបាត់បង់សមត្ថភាពចាប់អុកស៊ីសែនពីសួតទាំងស្រុង នាំឱ្យស្ទះដង្ហើម", isCorrect: false },
+      { text: "អេម៉ូក្លូប៊ីនបំប្លែងខ្លួនទៅជា Methemoglobin Fe3+ ក្នុងសរសៃឈាមភ្លាមៗ", isCorrect: false },
+      { text: "គោលិកាក្រហមនឹងបែកគ្រាប់ឈាមភ្លាមៗដោយសារសម្ពាធ Osmotic កើនឡើង", isCorrect: false }
+    ],
+    rationale: "2,3-DPG (ផលិតពី Embden-Meyerhof pathway តាម Luebering-Rapoport shunt) ភ្ជាប់ជាមួយ Hemoglobin ដើម្បីកាត់បន្ថយ Affinity ជួយឱ្យ Hb ព្រលែង O2 ទៅកាន់ជាលិកា។ បើឈាមស្តុកយូរខ្វះ 2,3-DPG នោះ Oxygen-dissociation curve នឹងរុញទៅឆ្វេង (Shift to left) ធ្វើឱ្យ Hb ចាប់ O2 ស្អិតខ្លាំង មិនព្រមបញ្ចេញឱ្យជាលិកាប្រើប្រាស់ឡើយ។"
+  },
+  {
+    topic: "RBC Metabolism — Methemoglobin Reductase [Analyze]",
+    title: "កម្មកររោងចក្រម្នាក់ពុលសារធាតុគីមីអុកស៊ីតកម្ម ធ្វើឱ្យអង់ស៊ីម Methemoglobin reductase មិនអាចទប់ទល់បាន កម្រិត Methemoglobin ឡើងដល់ 30% ស្បែកឡើងពណ៌ស្វាយ (Cyanosis)។ ហេតុអ្វីបានជាអ្នកជំងឺថប់ដង្ហើមធ្ងន់ធ្ងរ បើទោះជាចំនួន RBC ធម្មតា?",
+    hint: "ដែកក្នុង Heme ត្រូវអុកស៊ីតកម្មក្លាយជា Fe3+ (Ferric) ដែលមិនអាចចាប់ភ្ជាប់ O2 បាន។",
+    options: [
+      { text: "ដែកក្នុង Heme ក្លាយជា Fe3+ (Ferric) ដែលមិនអាចចាប់ចងអុកស៊ីសែនបញ្ជូនទៅជាលិកាបាន", isCorrect: true },
+      { text: "កោសិកា Neutrophils ស៊ីកោសិកាក្រហមទាំងអស់ក្នុងសរសៃឈាមសួត", isCorrect: false },
+      { text: "ភ្នាសកោសិកាក្រហមបាត់បង់ស្រទាប់ Glycophorin A ធ្វើឱ្យស្ទះសរសៃឈាម", isCorrect: false },
+      { text: "អេម៉ូក្លូប៊ីនទាំងអស់ត្រូវច្រោះចេញតាមទឹកនោមអស់គ្មានសល់ក្នុងឈាម", isCorrect: false }
+    ],
+    rationale: "Methemoglobin reductase pathway ទទួលខុសត្រូវថែរក្សាដែកក្នុង Heme ឱ្យស្ថិតក្នុងសភាព Ferrous state (Fe2+)។ ប្រសិនបើប្រែជា Fe3+ (Ferric) វានឹងក្លាយជា Methemoglobin ដែលគ្មានសមត្ថភាពចាប់ចង ឬបញ្ជូនអុកស៊ីសែនឡើយ ដែលនាំឱ្យជាលិការងការខ្វះអុកស៊ីសែនធ្ងន់ធ្ងរ។"
+  },
+  {
+    topic: "Erythropoiesis — Bone Marrow Response [Evaluate]",
+    title: "អ្នកជំងឺស្លេកស្លាំងម្នាក់មាន Hgb = 6.5 g/dL (Critical low)។ ពិនិត្យឈាមឃើញ Reticulocyte count ឡើងដល់ 8% (ធម្មតា ~1-2%)។ ផ្អែកលើមេរៀន Erythropoiesis តើការឆ្លើយតបរបស់ខួរឆ្អឹងស្ថិតក្នុងស្ថានភាពណា?",
+    hint: "ខួរឆ្អឹងនៅមានសមត្ថភាពបង្កើតកោសិកាប៉ះប៉ូវយ៉ាងសកម្ម (Accelerated erythropoiesis ឆ្លើយតបនឹង Hypoxia)។",
+    options: [
+      { text: "ខួរឆ្អឹងឆ្លើយតបយ៉ាងល្អក្នុងការបង្កើនផលិតកម្ម RBC (Accelerated erythropoiesis) ដើម្បីប៉ះប៉ូវការបាត់បង់", isCorrect: true },
+      { text: "ខួរឆ្អឹងរងការគាបសង្កត់ទាំងស្រុង (Bone marrow failure) មិនអាចផលិតកោសិកាបាន", isCorrect: false },
+      { text: "អ្នកជំងឺមានបញ្ហាកង្វះអរម៉ូន Erythropoietin (EPO) ពីតម្រងនោមធ្ងន់ធ្ងរ", isCorrect: false },
+      { text: "ជាសញ្ញាបញ្ជាក់ថា Stem cells ទាំងអស់បានប្រែប្រួលទៅជាកោសិកាមហារីក", isCorrect: false }
+    ],
+    rationale: "នៅពេល Hgb < 7 g/dL តម្រងនោមរង Hypoxia នឹងបញ្ចេញ EPO យ៉ាងច្រើន។ ប្រសិនបើ Bone marrow មានសុខភាពល្អ វានឹងពន្លឿនការផលិត (Accelerated erythropoiesis) បញ្ចេញ Reticulocytes មុនអាយុចូលក្នុងឈាមរហូតដល់ឡើងខ្ពស់ (>2%) ដែលជារឿយៗឃើញក្នុងការបាត់បង់ឈាមស្រួចស្រាវ ឬការបែកគ្រាប់ឈាម (Hemolysis)។"
+  },
+  {
+    topic: "RBC Cytoskeleton — Hereditary Spherocytosis [Analyze]",
+    title: "អ្នកជំងឺម្នាក់មានជំងឺតំណពូជ Hereditary Spherocytosis ដោយសារការខូចប្រូតេអ៊ីន Spectrin/Ankyrin ក្នុង Cytoskeleton។ ហេតុអ្វីបានជាគោលិកាក្រហមរបស់អ្នកជំងឺនេះងាយបែក (Hemolyze) ពេលឆ្លងកាត់អណ្តើក?",
+    hint: "បាត់បង់ភាពបត់បែន (Deformability) មិនអាចបង្រួមខ្លួនឆ្លងកាត់រន្ធតូចៗ 1-3 µm នៃ Splenic cords បាន។",
+    svg: `<svg width="220" height="85" viewBox="0 0 220 85"><circle cx="70" cy="42" r="28" fill="#1e293b" stroke="#ef4444" stroke-width="2.5"/><text x="70" y="46" fill="#ef4444" font-size="9" text-anchor="middle">Spherocyte</text><path d="M 120,20 L 120,65" stroke="#38bdf8" stroke-width="4"/><path d="M 140,20 L 140,65" stroke="#38bdf8" stroke-width="4"/><text x="130" y="78" fill="#94a3b8" font-size="8" text-anchor="middle">Slit 1-3 µm</text><path d="M 170,42 L 195,42" stroke="#ef4444" stroke-width="2" stroke-dasharray="2 2"/><text x="185" y="35" fill="#ef4444" font-size="8" text-anchor="middle">Lysis</text></svg>`,
+    options: [
+      { text: "បាត់បង់ភាពបត់បែន (Deformability) មិនអាចបង្រួមខ្លួនឆ្លងកាត់រន្ធចង្អៀត 1-3 µm ក្នុងអណ្តើក", isCorrect: true },
+      { text: "កោសិកាមានទំហំតូចពេកធ្វើឱ្យធ្លាក់ចេញតាមទឹកនោមអស់ភ្លាមៗ", isCorrect: false },
+      { text: "កោសិកាមិនមានផ្ទុកអេម៉ូក្លូប៊ីនទាល់តែសោះតាំងពីនៅក្នុងខួរឆ្អឹង", isCorrect: false },
+      { text: "អង់ទីហ្សែន ABO លើភ្នាសរលាយបាត់បង់ធ្វើឱ្យប្រព័ន្ធភាពស៊ាំយល់ច្រឡំ", isCorrect: false }
+    ],
+    rationale: "RBC ធម្មតាត្រូវមានភាពបត់បែន (Deformable) បង្រួមខ្លួនបានដល់ 117% ដើម្បីឆ្លងកាត់ Splenic cords ដែលមានទំហំត្រឹមតែ 1-3 µm។ កាលណាខ្វះ Spectrin ភ្នាសបាត់បង់ផ្ទៃ វាក្លាយជារាងស្វ៊ែររឹង (Spherocyte) បាត់បង់ Deformability ធ្វើឱ្យជាប់គាំង និងត្រូវបំផ្លាញដោយ Macrophages ក្នុងអណ្តើក (Culling)។"
+  },
+  {
+    topic: "Metabolism of Iron — Overload & Hemosiderin [Evaluate]",
+    title: "អ្នកជំងឺ Thalassemia ម្នាក់បានទទួលការបញ្ចូលឈាមរាប់សិបដង។ ពិនិត្យទឹកនោមឃើញកម្ទេច Hemosiderin វិជ្ជមាន ហើយ Ferritin ក្នុងសេរ៉ូមឡើងខ្ពស់ខ្លាំង។ ផ្អែកលើមេរៀនតើបាតុភូតនេះកើតឡើងដោយសារអ្វី?",
+    hint: "ការលើសជាតិដែក (Iron overload) ហួសសមត្ថភាពស្តុករបស់ Ferritin ធ្វើឱ្យ Lysosomes បំប្លែង Ferritin ទៅជា Hemosiderin។",
+    options: [
+      { text: "ជាតិដែកលើសលប់លើសសមត្ថភាពស្តុក ធ្វើឱ្យ Lysosomes បំប្លែង Ferritin ទៅជា Hemosiderin", isCorrect: true },
+      { text: "តម្រងនោមរបស់អ្នកជំងឺផលិតអ័រម៉ូន EPO ច្រើនពេកធ្វើឱ្យច្រោះដែកចេញ", isCorrect: false },
+      { text: "ជាតិដែកក្នុងឈាមទាំងអស់ត្រូវបំប្លែងទៅជា Bilirubin non-conjugate ក្នុងទឹកនោម", isCorrect: false },
+      { text: "ម៉ូលេគុល Transferrin ទាំងអស់ត្រូវបានបំផ្លាញដោយបាក់តេរីក្នុងពោះវៀន", isCorrect: false }
+    ],
+    rationale: "Ferritin ជាទម្រង់ស្តុកដែកចម្បងក្នុងថ្លើម និងខួរឆ្អឹង។ នៅពេលរាងកាយលើសជាតិដែកខ្លាំង (Iron overload ពីការបញ្ចូលឈាមញឹកញាប់) Lysosomes នឹងធ្វើ Degradation លើ Ferritin ក្លាយជា Hemosiderin (មិនរលាយ) ដែលអាចរកឃើញក្នុងកោសិកាជាលិកា និងក្នុងទឹកនោម (Hemosiderinuria)។"
+  },
+  {
+    topic: "Hematopoiesis — Extramedullary Hematopoiesis [Analyze]",
+    title: "អ្នកជំងឺម្នាក់មានជំងឺ myelofibrosis ដែលខួរឆ្អឹងក្លាយជាសរសៃសម្លាក មិនអាចផលិតឈាមបាន។ ពិនិត្យពោះឃើញពោះប៉ោងផ្នែកខាងឆ្វេង និងខាងស្តាំលើខ្លាំង (Hepatosplenomegaly)។ តើការរីកធំនៃសរីរាង្គទាំងពីរនេះបណ្តាលមកពីយន្តការអ្វី?",
+    hint: "ថ្លើម និងអណ្តើកត្រូវបង្ខំចិត្តធ្វើ Extramedullary hematopoiesis ដើម្បីស្រោចស្រង់ជីវិត។",
+    options: [
+      { text: "ថ្លើម និងអណ្តើកត្រូវបង្ខំចិត្តធ្វើ Extramedullary hematopoiesis ដើម្បីផលិតកោសិកាឈាមជំនួសខួរឆ្អឹង", isCorrect: true },
+      { text: "ការប្រមូលផ្តុំកោសិកាខ្លាញ់ Yellow bone marrow នៅក្នុងប្រហោងពោះ", isCorrect: false },
+      { text: "ការកើនឡើងនៃអរម៉ូន Insulin ធ្វើឱ្យកោសិកាថ្លើមរីកធំខុសប្រក្រតី", isCorrect: false },
+      { text: "ការស្ទះបំពង់ទឹកនោមទាំងសងខាងធ្វើឱ្យហើមទឹកពេញពោះ", isCorrect: false }
+    ],
+    rationale: "នៅពេលខួរឆ្អឹងខូចខាតមិនអាចធ្វើ Intramedullary hematopoiesis បាន ថ្លើម និងអណ្តើកដែលជាសរីរាង្គធ្លាប់ផលិតឈាមកាលពីក្នុងគភ៌ នឹងរស់ឡើងវិញនូវមុខងារផលិតឈាម (Extramedullary hematopoiesis)។ ការកើនឡើងនូវកោសិកាផលិតឈាមក្នុងជាលិកាសរីរាង្គទាំងពីរនេះបណ្តាលឱ្យវារីកមាឌធំ (Hepatosplenomegaly)។"
+  },
+  {
+    topic: "Hemoglobin Synthesis — Globin Genetics [Analyze]",
+    title: "យោងតាមមេរៀន Hemoglobin Synthesis ប្រសិនបើមានការខូចខាតហ្សែន (Deletion/Mutation) នៅលើក្រូម៉ូសូមគូទី ១១ (Chromosome 11) តើការសំយោគខ្សែច្រវាក់ Globin ណាខ្លះដែលនឹងត្រូវរងផលប៉ះពាល់?",
+    hint: "ក្រូម៉ូសូម ១១ ផ្ទុកហ្សែន Beta, Gamma, Delta, Epsilon; ក្រូម៉ូសូម ១៦ ផ្ទុក Alpha, Zeta។",
+    options: [
+      { text: "Beta, Gamma, Delta, និង Epsilon globin chains", isCorrect: true },
+      { text: "Alpha និង Zeta globin chains តែប៉ុណ្ណោះ", isCorrect: false },
+      { text: "គ្រោងឆ្អឹង Spectrin និង Ankyrin នៃភ្នាសកោសិកា", isCorrect: false },
+      { text: "អង់ស៊ីម ALA synthetase ក្នុងមីតូកុងឌ្រី", isCorrect: false }
+    ],
+    rationale: "ស្លាយមេរៀនបញ្ជាក់យ៉ាងច្បាស់ថា៖ ក្រូម៉ូសូមគូទី ១១ ទទួលខុសត្រូវចំពោះការផលិតខ្សែច្រវាក់ Beta, Gamma, Delta, និង Epsilon។ ចំណែកឯក្រូម៉ូសូមគូទី ១៦ ទទួលខុសត្រូវចំពោះខ្សែច្រវាក់ Alpha និង Zeta។"
+  },
+  {
+    topic: "Hemoglobin Types — HbF Transition [Evaluate]",
+    title: "ទារកអាយុ ៥ ខែ ត្រូវបានគ្រូពេទ្យពិនិត្យឈាមរកឃើញជំងឺ Sickle Cell Anemia (Beta-globin chain defect)។ ហេតុអ្វីបានជារោគសញ្ញានៃជំងឺនេះមិនស្តែងចេញភ្លាមៗពេលទើបនឹងកើត ប៉ុន្តែទើបតែចាប់ផ្តើមលេចឡើងនៅអាយុចន្លោះ ៣ ទៅ ៦ ខែ?",
+    hint: "ពេលទើបកើតទារកមាន HbF (Alpha2 Gamma2) ការពារ; នៅអាយុ 3-6 ខែ HbF ថយចុះជំនួសដោយ HbA (Alpha2 Beta2)។",
+    options: [
+      { text: "ព្រោះពេលទើបកើតមាន HbF (Alpha2 Gamma2) ច្រើន ហើយនៅអាយុ 3-6 ខែទើបប្តូរមកជា HbA (Beta chain)", isCorrect: true },
+      { text: "ព្រោះទារកទើបនឹងកើតមិនទាន់មានកោសិកាឈាមក្រហមរត់ក្នុងចរន្តឈាម", isCorrect: false },
+      { text: "ព្រោះតម្រងនោមទារកមិនទាន់ចេះផលិតអរម៉ូន Erythropoietin (EPO)", isCorrect: false },
+      { text: "ព្រោះកម្រិត 2,3-DPG ក្នុងខ្លួនទារកឡើងខ្ពស់រារាំងមិនឱ្យគ្រាប់ឈាមកោង", isCorrect: false }
+    ],
+    rationale: "កាលនៅក្នុងគភ៌និងពេលទើបកើត អេម៉ូក្លូប៊ីនចម្បងគឺ Fetal Hemoglobin (HbF: Alpha2 Gamma2) ដែលគ្មានច្រវាក់ Beta ឡើយ។ ចន្លោះពី ៣ ទៅ ៦ ខែក្រោយកើត ច្រវាក់ Gamma ធ្លាក់ចុះ ហើយច្រវាក់ Beta កើនឡើងជំនួសដើម្បីបង្កើត HbA (Alpha2 Beta2)។ ដូច្នេះ ភាពមិនប្រក្រតីនៃ Beta chain នឹងចាប់ផ្តើមស្តែងរោគសញ្ញានៅពេលនេះ។"
+  },
+  {
+    topic: "Hemoglobin Catabolism — Bilirubin [Analyze]",
+    title: "អ្នកជំងឺម្នាក់មានការបែកគ្រាប់ឈាមក្នុងសរសៃឈាមយ៉ាងគំហុក (Severe Hemolytic Crisis)។ ពិនិត្យឈាមឃើញ Unconjugated (Indirect) Bilirubin ឡើងខ្ពស់ខ្លាំងក្នុងឈាម។ តើសារធាតុនេះកកើតចេញពីសមាសធាតុណានៃគ្រាប់ឈាមក្រហមដែលងាប់?",
+    hint: "RBC បែក -> Hemoglobin -> Heme បំប្លែងជា Bilirubin; Globin បំប្លែងជា Amino acids។",
+    options: [
+      { text: "បានមកពីការរំលាយបំបែកនៃផ្នែក Heme នៃម៉ូលេគុលអេម៉ូក្លូប៊ីនដោយប្រព័ន្ធ RES", isCorrect: true },
+      { text: "បានមកពីការបញ្ចេញអំបិលសូដ្យូម និងប៉ូតាស្យូមកាត់តាមភ្នាសកោសិកា", isCorrect: false },
+      { text: "បានមកពីការសំយោគឡើងវិញនៃប្រូតេអ៊ីន Transferrin ក្នុងខួរឆ្អឹង", isCorrect: false },
+      { text: "បានមកពីការកកកុញនៃជាតិស្ករ Glycogen ក្នុងកោសិកា Neutrophil", isCorrect: false }
+    ],
+    rationale: "ពេល RBC ចាស់ៗ ឬខូចត្រូវបែកបាក់ អេម៉ូក្លូប៊ីនត្រូវបំបែកជា Heme និង Globin។ Globin ត្រូវបំប្លែងជា Amino acids ប្រើឡើងវិញ រីឯ Heme (ក្រោយដកដែក Fe ចេញ) ត្រូវបំប្លែងទៅជា Unconjugated bilirubin (ពុល និងមិនរលាយក្នុងទឹក) បញ្ជូនទៅថ្លើមដើម្បីធ្វើ Conjugation មុននឹងបញ្ចេញចោលតាមទឹកប្រមាត់។"
+  },
+  {
+    topic: "Metabolism of Iron — Dietary Interactions [Evaluate]",
+    title: "អ្នកជំងឺស្រីម្នាក់មានស្លេកស្លាំងខ្វះជាតិដែក (IDA) កំពុងលេបថ្នាំជាតិដែកបំប៉ន (Ferrous sulfate)។ ដើម្បីបង្កើនប្រសិទ្ធភាពនៃការបឺតស្រូបជាតិដែកឱ្យបានអតិបរមា តើអ្នកបច្ចេកទេសគួរណែនាំអ្នកជំងឺឱ្យទទួលទានថ្នាំនេះជាមួយអ្វី?",
+    hint: "ទទួលទានជាមួយទឹកក្រូចស្រស់ (វីតាមីន C) និងជៀសវាងតែ/កាហ្វេ/ទឹកដោះគោ។",
+    options: [
+      { text: "ទទួលទានជាមួយទឹកក្រូចស្រស់ ឬវីតាមីនសេ និងជៀសវាងការញ៉ាំជាមួយតែ កាហ្វេ ឬទឹកដោះគោ", isCorrect: true },
+      { text: "ទទួលទានជាមួយទឹកដោះគោក្តៅឧណ្ហៗ និងតែបៃតងរាល់ព្រឹក", isCorrect: false },
+      { text: "ទទួលទានជាមួយថ្នាំបន្សាបជាតិអាស៊ីតក្រពះមុនពេលចូលគេង", isCorrect: false },
+      { text: "ទទួលទានជាមួយទឹកសណ្តែកសៀងខាប់ និងកាហ្វេខ្មៅ", isCorrect: false }
+    ],
+    rationale: "យោងតាមស្លាយមេរៀន Metabolism of Iron៖ វីតាមីនសេ (Vitamin C) ទឹកក្រូច និងរបស់ជូរ ជួយសម្រួលដល់ការបឺតស្រូបជាតិដែកបានយ៉ាងល្អ។ ផ្ទុយទៅវិញ តែ កាហ្វេ (Tannins) ទឹកដោះគោ (Calcium) និង Oregano កាត់បន្ថយការបឺតស្រូបជាតិដែកយ៉ាងខ្លាំង។"
+  },
+  {
+    topic: "RBC Osmotic Fragility — Hypotonic Lysis [Analyze]",
+    title: "ក្នុងមន្ទីរពិសោធន៍ ប្រសិនបើអ្នកបច្ចេកទេសច្រឡំយកកោសិកាឈាមក្រហមទៅលាយក្នុងសូលុយស្យុងអ៊ីប៉ូតូនិច (Hypotonic solution ដូចជា ទឹកសុទ្ធ Distilled water) តើនឹងមានអ្វីកើតឡើងចំពោះកោសិកាក្រហម?",
+    hint: "ទឹកហូរចូលក្នុងកោសិកាធ្វើឱ្យហើមប៉ោងរហូតដល់បែក (Hemolysis)។",
+    svg: `<svg width="200" height="85" viewBox="0 0 200 85"><circle cx="100" cy="42" r="34" fill="#ef4444" opacity="0.7"/><path d="M 50,42 L 75,42" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow)"/><path d="M 150,42 L 125,42" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrow)"/><text x="100" y="46" fill="#f8fafc" font-size="10" text-anchor="middle">H2O Inflow</text><text x="100" y="80" fill="#f59e0b" font-size="9" text-anchor="middle">Swelling & Osmotic Lysis</text></svg>`,
+    options: [
+      { text: "ទឹកជ្រាបហូរចូលក្នុងកោសិកាធ្វើឱ្យហើមប៉ោងរហូតដល់ធ្លាយបែក (Osmotic Lysis / Hemolysis)", isCorrect: true },
+      { text: "ទឹកហូរចេញពីកោសិកាធ្វើឱ្យកោសិកាក្រៀមជ្រួញស្វិត (Crenation)", isCorrect: false },
+      { text: "កោសិកានៅរក្សាទ្រង់ទ្រាយ Biconcave disc ដដែលដោយគ្មានការប្រែប្រួល", isCorrect: false },
+      { text: "អេម៉ូក្លូប៊ីនទាំងអស់ប្រែទៅជាគ្រាប់ក្រានុល Eosinophil ភ្លាមៗ", isCorrect: false }
+    ],
+    rationale: "យោងតាមស្លាយមេរៀន Hemoglobin Function (ស្លាយទី ២៧)៖ ក្នុងសូលុយស្យុង Hypotonic ទឹកនឹងជ្រាបហូរចូលក្នុងកោសិកាក្រហមតាម Osmosis ធ្វើឱ្យកោសិការីកមាឌហើមធំ រហូតដល់ធ្លាយភ្នាសបែកគ្រាប់ឈាម (Lysis/Hemolyze)។ បើ Hypertonic ទើបកោសិកាខ្សោះទឹកក្រៀមជ្រួញ។"
+  },
+  {
+    topic: "Hematology Critical Values — Emergency Action [Evaluate]",
+    title: "លទ្ធផលពិនិត្យឈាមបន្ទាន់របស់កុមារម្នាក់បង្ហាញ៖ Hgb = 5.2 g/dL, Platelets = 14.0 x 10^9/L។ ផ្អែកលើនិយមន័យ Critical Values នៃមេរៀន តើសកម្មភាពដំបូងបំផុតរបស់អ្នកបច្ចេកទេសមន្ទីរពិសោធន៍គឺអ្វី?",
+    hint: "ទូរស័ព្ទរាយការណ៍បន្ទាន់ទៅគ្រូព្យាបាល (Panic/Critical value protocol) ព្រោះ Hgb < 7 g/dL និង Platelets < 20 x 10^9/L។",
+    options: [
+      { text: "ផ្ទៀងផ្ទាត់បច្ចេកទេសឡើងវិញភ្លាមៗ រួចទូរស័ព្ទរាយការណ៍បន្ទាន់ទៅគ្រូពេទ្យព្យាបាល (Critical Call)", isCorrect: true },
+      { text: "រក្សាទុកលទ្ធផលក្នុងកុំព្យូទ័ររង់ចាំរហូតដល់សាមីខ្លួនមកទទួលយកនៅថ្ងៃបន្ទាប់", isCorrect: false },
+      { text: "ណែនាំឱ្យអ្នកជំងឺត្រឡប់ទៅផ្ទះហូបបន្លែបៃតងបន្ថែមដោយមិនបាច់ជូនដំណឹងគ្រូពេទ្យ", isCorrect: false },
+      { text: "លុបលទ្ធផលចោលពីព្រោះម៉ាស៊ីនស្វ័យប្រវត្តិតែងតែផ្តល់ទិន្នន័យមិនពិត", isCorrect: false }
+    ],
+    rationale: "ទាំង Hgb < 7.0 g/dL (កម្រិតគ្រោះថ្នាក់នាំឱ្យគាំងបេះដូង ស្លេកស្លាំង hypotension) និង Platelets < 20.0 x 10^9/L (ប្រឈមនឹងការហូរឈាមក្នុងខួរក្បាលដោយឯកឯង) សុទ្ធតែជា Critical Values (Panic values)។ អ្នកបច្ចេកទេសត្រូវតែប្រញាប់ផ្ទៀងផ្ទាត់និងទូរស័ព្ទរាយការណ៍បន្ទាន់ទៅគ្រូពេទ្យព្យាបាលភ្លាមៗ។"
+  },
+  {
+    topic: "Erythropoiesis — Bone Marrow Islands [Analyze]",
+    title: "ក្នុងការបណ្តុះកោសិកាខួរឆ្អឹង (Bone marrow culture) គេសង្កេតឃើញកោសិកាក្រហមប្រមូលផ្តុំជុំវិញ Macrophage កណ្តាល ហៅថា 'Erythroblastic Island'។ តើ Macrophage នេះដើរតួនាទីអ្វីដល់ Normoblasts?",
+    hint: "ផ្តល់ជាតិដែក (Iron) និងលេបត្របាក់ស៊ីណៃយូដែលរបូតចេញ (Extruded nuclei)។",
+    options: [
+      { text: "ផ្គត់ផ្គង់ជាតិដែក (Ferritin) ដល់ Normoblasts និងលេបត្របាក់ណៃយូដែលរបូតចេញ", isCorrect: true },
+      { text: "ផលិតអរម៉ូន Erythropoietin ដោយផ្ទាល់នៅក្នុងខួរឆ្អឹង", isCorrect: false },
+      { text: "បំប្លែងកោសិកាក្រហមឱ្យក្លាយទៅជាកោសិកាឈាមស Lymphocyte", isCorrect: false },
+      { text: "រារាំងមិនឱ្យកោសិកាក្រហមសំយោគអេម៉ូក្លូប៊ីនបានជោគជ័យ", isCorrect: false }
+    ],
+    rationale: "Erythroblastic island ក្នុងខួរឆ្អឹងមាន Macrophage (Nurse cell) នៅចំកណ្តាលហ៊ុំព័ទ្ធដោយ Normoblasts។ Macrophage នេះដើរតួនាទីផ្ទេរជាតិដែកទៅឱ្យ erythroblasts ដើម្បីសំយោគ Heme ព្រមទាំងលេបត្របាក់ណៃយូដែលត្រូវច្រានទម្លាក់ចោល (Extruded pyknotic nuclei) ពី Orthochromic normoblast។"
+  },
+  {
+    topic: "Megaloblastic Anemia — Neutrophil Morphology [Analyze]",
+    title: "អ្នកជំងឺម្នាក់មាន MCV = 115 fL (Macrocytic)។ ពិនិត្យឈាមក្រៅឃើញ Hypersegmented neutrophils (មានណៃយូ ៦-៨ ក្លែប)។ ផ្អែកលើមេរៀន តើអ្នកជំងឺនេះមានបញ្ហាអ្វី?",
+    hint: "Hypersegmented neutrophils បញ្ជាក់ច្បាស់ពី Megaloblastic anemia (កង្វះ B12 ឬ Folate)។",
+    svg: `<svg width="200" height="85" viewBox="0 0 200 85"><circle cx="100" cy="42" r="32" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/><circle cx="85" cy="32" r="6" fill="#818cf8"/><circle cx="100" cy="28" r="5.5" fill="#818cf8"/><circle cx="115" cy="34" r="6" fill="#818cf8"/><circle cx="115" cy="50" r="5.5" fill="#818cf8"/><circle cx="100" cy="56" r="6" fill="#818cf8"/><circle cx="85" cy="48" r="5.5" fill="#818cf8"/><text x="100" y="80" fill="#f59e0b" font-size="8" text-anchor="middle">Hypersegmented Neutrophil (6+ lobes)</text></svg>`,
+    options: [
+      { text: "Megaloblastic anemia ដោយសារកង្វះវីតាមីន B12 ឬ Folic acid ប៉ះពាល់ដល់ការសំយោគ DNA", isCorrect: true },
+      { text: "Iron deficiency anemia ដោយសារការបាត់បង់ឈាមរដូវច្រើន", isCorrect: false },
+      { text: "Hereditary spherocytosis ដោយសារការខូចប្រូតេអ៊ីន Spectrin", isCorrect: false },
+      { text: "Acanthocytosis ដោយសារជំងឺក្រិនថ្លើមកកកុញជាតិខ្លាញ់", isCorrect: false }
+    ],
+    rationale: "វត្តមាន Hypersegmented neutrophils (Neutrophil មានណៃយូច្រើនជាង ៥ ក្លែប) រួមជាមួយ Macrocytosis (MCV > 100 fL) គឺជាសញ្ញាសម្គាល់ច្បាស់លាស់នៃ Megaloblastic anemia ដែលបណ្តាលមកពីកង្វះ Vit B12 ឬ Folic acid ធ្វើឱ្យខូចខាតដល់ការសំយោគ DNA នៃកោសិកាទាំងអស់ដែលមានណៃយូ។"
+  },
+  {
+    topic: "Heme Biosynthesis — Enzyme & Co-factor [Analyze]",
+    title: "អង់ស៊ីម ALA synthetase ត្រូវការ Co-enzyme សំខាន់មួយគឺ Pyridoxal phosphate (Vitamin B6) ក្នុងការសំយោគ Heme។ ប្រសិនបើអ្នកជំងឺខ្វះវីតាមីន B6 តើនឹងមានផលវិបាកអ្វីកើតឡើងចំពោះកោសិកាក្រហម?",
+    hint: "មិនអាចសំយោគ Protoporphyrin IX បាន ធ្វើឱ្យដែកកកកុញក្នុងមីតូកុងឌ្រី (Sideroblastic anemia)។",
+    options: [
+      { text: "មិនអាចសំយោគ Protoporphyrin IX បាន នាំឱ្យដែកកកកុញជុំវិញណៃយូកោសិកា (Ring sideroblasts)", isCorrect: true },
+      { text: "ខ្សែច្រវាក់ Globin ទាំងអស់ត្រូវបំប្លែងទៅជាវីតាមីន B12 ដោយស្វ័យប្រវត្តិ", isCorrect: false },
+      { text: "កោសិកាក្រហមប្រែទៅជាគ្មានភ្នាសកោសិកា និងគ្មានអង់ទីហ្សែន ABO", isCorrect: false },
+      { text: "កោសិកាឈាមស Basophil នឹងកើនឡើងជំនួសកោសិកាក្រហមទាំងអស់", isCorrect: false }
+    ],
+    rationale: "យោងតាមគំនូសបំព្រួញ Heme portion (ស្លាយទី ៨-៩)៖ Succinyl CoA + Glycine បំប្លែងជា ALA ដោយសារអង់ស៊ីម ALA synthetase (ត្រូវការ Vit B6)។ បើខ្វះ Vit B6 នោះការផលិត Protoporphyrin IX នឹងត្រូវរាំងស្ទះ ធ្វើឱ្យដែកមិនអាចចងភ្ជាប់បាន ហើយកកកុញក្នុងមីតូកុងឌ្រី បង្កើតបានជា Ring sideroblasts លើគំនាសខួរឆ្អឹង។"
+  },
+  {
+    topic: "WBC Differentials — Left Shift [Evaluate]",
+    title: "លើគំនាសឈាមបំពាក់ពណ៌ Wright-Giemsa អ្នកបច្ចេកទេសប្រទះឃើញកោសិកាឈាមសទំហំ 15 µm ដែលមានណៃយូរាងដូចសរសៃបូកោង (Band/Horseshoe-shaped) ដោយគ្មានសរសៃ Filament ស្តើងភ្ជាប់ក្លែបឡើយ។ តើកោសិកានេះជាអ្វី ហើយការកើនឡើងរបស់វាបញ្ជាក់ពីអ្វី?",
+    hint: "Band neutrophil (Stab cell) កើនឡើងក្នុង Severe acute bacterial infection (Shift to the left)។",
+    options: [
+      { text: "Band neutrophil (កោសិកាខ្ចី) បញ្ជាក់ពីការឆ្លើយតបខ្លាំងនឹងការឆ្លងមេរោគបាក់តេរីស្រួចស្រាវ (Shift to left)", isCorrect: true },
+      { text: "Mature lymphocyte បញ្ជាក់ពីជំងឺខ្វះជាតិដែករ៉ាំរ៉ៃក្នុងប្លាស្មា", isCorrect: false },
+      { text: "Eosinophil ពេញវ័យ បញ្ជាក់ពីការឆ្លងព្រូនអគ្គីលីលក្នុងថ្លើម", isCorrect: false },
+      { text: "Monocyte មិនទាន់ពេញវ័យ បញ្ជាក់ពីជំងឺលើសកូលេស្តេរ៉ុលក្នុងឈាម", isCorrect: false }
+    ],
+    rationale: "Band neutrophil (Band form ~3% ក្នុងឈាមធម្មតា) គឺជាដំណាក់កាលមុន Segmented neutrophil ដែលណៃយូរាងកោងដូចក្រចកសេះ ឬអក្សរ U/C តែមិនទាន់បែកជាក្លែបភ្ជាប់ដោយ Filament ស្តើងនៅឡើយ។ ការកើនឡើងខ្ពស់នៃ Band cells ក្នុងឈាមក្រៅ (Shift to the left) បញ្ជាក់ពីការរលាក ឬឆ្លងមេរោគបាក់តេរីស្រួចស្រាវធ្ងន់ធ្ងរ។"
+  },
+  {
+    topic: "Hemoglobin Types — Subunit Composition [Analyze]",
+    title: "យោងតាមមេរៀន Hemoglobin Synthesis អេម៉ូក្លូប៊ីនរបស់ទារកក្នុងផ្ទៃ Fetal Hemoglobin (HbF) ត្រូវបានផ្សំឡើងដោយខ្សែច្រវាក់ Globin គូណាខ្លះ?",
+    hint: "HbF = Alpha2 Gamma2 (អាល់ហ្វា ២ និង ហ្គាម៉ា ២)។",
+    options: [
+      { text: "ច្រវាក់អាល់ហ្វា ២ និង ច្រវាក់ហ្គាម៉ា ២ (Alpha2 Gamma2)", isCorrect: true },
+      { text: "ច្រវាក់អាល់ហ្វា ២ និង ច្រវាក់បេតា ២ (Alpha2 Beta2)", isCorrect: false },
+      { text: "ច្រវាក់អាល់ហ្វា ២ និង ច្រវាក់ដីលតា ២ (Alpha2 Delta2)", isCorrect: false },
+      { text: "ច្រវាក់ហ្សេតា ២ និង ច្រវាក់អេបស៊ីឡូន ២ (Zeta2 Epsilon2)", isCorrect: false }
+    ],
+    rationale: "តាមស្លាយ Hemoglobin function៖ HbA (មនុស្សពេញវ័យ) = Alpha2 Beta2 (95-98%); HbA2 = Alpha2 Delta2 (1-3%); ចំណែក HbF (Fetal hemoglobin របស់ទារកក្នុងផ្ទៃ) = Alpha2 Gamma2។ Zeta និង Epsilon ជាច្រវាក់របស់ Embryonic hemoglobin (Gower I/II, Portland) ក្នុងអំប្រ៊ីយ៉ុងអាយុក្រោម ៣ ខែ។"
+  },
+  {
+    topic: "Hemoglobin Dynamics — Gas Exchange [Analyze]",
+    title: "នៅកម្រិតកោសិកាជាលិកាដែលមានកំហាប់ CO2 ខ្ពស់ សីតុណ្ហភាពក្តៅ និងមជ្ឈដ្ឋានអាស៊ីត (Acidic pH) តើម៉ូលេគុល Oxyhemoglobin នឹងមានប្រតិកម្មយ៉ាងដូចម្តេច?",
+    hint: "ព្រលែង O2 ទៅឱ្យជាលិកា ហើយចាប់យក CO2 និង H+ ក្លាយជា Deoxyhemoglobin (Bohr effect)។",
+    options: [
+      { text: "ផ្តាច់ព្រលែងអុកស៊ីសែន (O2) ទៅឱ្យជាលិកា ហើយចាប់ចងយកកាកសំណល់ CO2 និងប្រូតុង H+", isCorrect: true },
+      { text: "ចាប់យកអុកស៊ីសែនកាន់តែណែនជាងមុន និងបដិសេធមិនព្រមបញ្ចេញ O2", isCorrect: false },
+      { text: "រលាយម៉ូលេគុល Heme ចោលភ្លាមៗក្នុងប្លាស្មាឈាម", isCorrect: false },
+      { text: "បញ្ឈប់សកម្មភាពដឹកជញ្ជូនឧស្ម័នទាំងស្រុងរហូតដល់ត្រឡប់ទៅថ្លើមវិញ", isCorrect: false }
+    ],
+    rationale: "យោងតាមស្លាយ Hemoglobin Function (ស្លាយទី ២៤-២៥)៖ នៅសួត (Cool, neutral, high O2) អេម៉ូក្លូប៊ីនចាប់យក O2 ក្លាយជា Oxyhemoglobin [Hb(O2)4]។ នៅពេលទៅដល់ជាលិកា (Warm, acid, high CO2, low O2) Oxyhemoglobin នឹងបំបែកផ្តាច់ព្រលែង O2 ឱ្យទៅកោសិកាជាលិកាប្រើប្រាស់ និងចាប់យក CO2 ត្រឡប់មកសួតវិញ។"
+  }
+];
+
+function shuffleArray(arr) {
+  const newArr = [...arr];
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+}
+
+let activeQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let timeLeft = 60;
+let timerInterval = null;
+let answered = false;
+let userResults = [];
+
+function initQuiz() {
+  activeQuestions = shuffleArray(rawQuestions).map(q => {
+    return {
+      ...q,
+      options: shuffleArray(q.options)
+    };
+  });
+  
+  currentIndex = 0;
+  score = 0;
+  userResults = [];
+  document.getElementById('finalCard').style.display = 'none';
+  document.getElementById('quizCard').style.display = 'block';
+  loadQuestion(currentIndex);
+}
+
+function loadQuestion(index) {
+  answered = false;
+  timeLeft = 60;
+  clearInterval(timerInterval);
+  
+  const q = activeQuestions[index];
+  document.getElementById('topicBadge').textContent = q.topic;
+  document.getElementById('qCount').textContent = `សំណួរទី ${index + 1} នៃ ${activeQuestions.length}`;
+  document.getElementById('questionTitle').textContent = `${index + 1}. ${q.title}`;
+  
+  const diagBox = document.getElementById('diagramContainer');
+  if (q.svg) {
+    diagBox.innerHTML = q.svg;
+    diagBox.style.display = 'flex';
+  } else {
+    diagBox.innerHTML = '';
+    diagBox.style.display = 'none';
+  }
+
+  document.getElementById('hintContent').textContent = q.hint;
+  document.getElementById('hintContent').style.display = 'none';
+  document.getElementById('feedbackBox').style.display = 'none';
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('nextBtn').textContent = (index === activeQuestions.length - 1) ? "ពិនិត្យលទ្ធផល →" : "សំណួរបន្ទាប់ →";
+  
+  const optionsGrid = document.getElementById('optionsGrid');
+  optionsGrid.innerHTML = '';
+  q.options.forEach((optObj, optIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="letter">${String.fromCharCode(65 + optIdx)}.</span> <span>${optObj.text}</span>`;
+    btn.onclick = () => selectOption(optIdx);
+    optionsGrid.appendChild(btn);
+  });
+  
+  updateTimerUI();
+  timerInterval = setInterval(() => {
+    if (timeLeft > 0) {
+      timeLeft--;
+      updateTimerUI();
+    } else {
+      clearInterval(timerInterval);
+      if (!answered) {
+        handleTimeout();
+      }
+    }
+  }, 1000);
+  
+  updateProgress();
+}
+
+function updateTimerUI() {
+  const el = document.getElementById('timerText');
+  const box = document.getElementById('timerBox');
+  el.textContent = timeLeft + 's';
+  if (timeLeft <= 10) {
+    box.classList.add('urgent');
+  } else {
+    box.classList.remove('urgent');
+  }
+}
+
+function toggleHint() {
+  const h = document.getElementById('hintContent');
+  h.style.display = h.style.display === 'none' ? 'block' : 'none';
+}
+
+function selectOption(chosenIdx) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
+  
+  const q = activeQuestions[currentIndex];
+  const buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(btn => btn.disabled = true);
+  
+  const correctIdx = q.options.findIndex(o => o.isCorrect);
+  const isCorrect = q.options[chosenIdx].isCorrect;
+  
+  if (isCorrect) {
+    score++;
+    buttons[chosenIdx].classList.add('correct');
+  } else {
+    buttons[chosenIdx].classList.add('wrong');
+    buttons[correctIdx].classList.add('correct');
+  }
+  
+  userResults.push({
+    q: q.title,
+    chosen: q.options[chosenIdx].text,
+    correctText: q.options[correctIdx].text,
+    isCorrect: isCorrect,
+    why: q.rationale
+  });
+  
+  document.getElementById('liveScore').textContent = `ពិន្ទុ: ${score} / ${currentIndex + 1}`;
+  document.getElementById('feedbackText').textContent = q.rationale;
+  document.getElementById('feedbackBox').style.display = 'block';
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function handleTimeout() {
+  answered = true;
+  const q = activeQuestions[currentIndex];
+  const buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(btn => btn.disabled = true);
+  const correctIdx = q.options.findIndex(o => o.isCorrect);
+  buttons[correctIdx].classList.add('correct');
+  
+  userResults.push({
+    q: q.title,
+    chosen: "អស់ពេល (Time Expired)",
+    correctText: q.options[correctIdx].text,
+    isCorrect: false,
+    why: q.rationale
+  });
+  
+  document.getElementById('feedbackText').innerHTML = '<strong style="color:#ef4444;">អស់ពេល ៦០ វិនាទី! (Time Expired)</strong><br>' + q.rationale;
+  document.getElementById('feedbackBox').style.display = 'block';
+  document.getElementById('nextBtn').disabled = false;
+}
+
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex < activeQuestions.length) {
+    loadQuestion(currentIndex);
+  } else {
+    showFinalResults();
+  }
+}
+
+function updateProgress() {
+  const pct = ((currentIndex + 1) / activeQuestions.length) * 100;
+  document.getElementById('progressBar').style.width = pct + '%';
+}
+
+function showFinalResults() {
+  document.getElementById('quizCard').style.display = 'none';
+  document.getElementById('finalCard').style.display = 'block';
+  const pct = Math.round((score / activeQuestions.length) * 100);
+  document.getElementById('finalScoreVal').textContent = `${score} / ${activeQuestions.length} (${pct}%)`;
+  
+  let msg = '';
+  if (pct >= 80) msg = 'ល្អប្រសើរណាស់! អ្នកមានសមត្ថភាពវិភាគករណីគ្លីនិក និងបកស្រាយទិន្នន័យមន្ទីរពិសោធន៍ឈាមវិទ្យាយ៉ាងស្ទាត់ជំនាញ។';
+  else if (pct >= 60) msg = 'លទ្ធផលល្អបង្គួរ! គួរពិនិត្យឡើងវិញលើរូបមន្ត Rule of Three, ជីវគីមីនៃ HMP shunt/Heinz bodies, និងយន្តការមេតាប៉ូលីសជាតិដែក។';
+  else msg = 'ត្រូវរំលឹកមេរៀនឡើងវិញ ជាពិសេសការបកស្រាយលទ្ធផល CBC (MCV/MCHC), លក្ខណៈ RBC membrane, និងមូលហេតុនៃ Megaloblastic anemia។';
+  document.getElementById('finalFeedback').textContent = msg;
+
+  const reviewEl = document.getElementById('reviewContainer');
+  reviewEl.innerHTML = '<h3 style="margin-bottom:12px; color:var(--primary);">ពិនិត្យចម្លើយលម្អិត (Clinical Case Review):</h3>' + 
+    userResults.map((r, i) => `
+      <details class="review-item">
+        <summary>${i + 1}. ${r.isCorrect ? "✓ ត្រឹមត្រូវ" : "✗ ខុស"} — ${r.q.substring(0, 50)}...</summary>
+        <p><strong>ករណីសំណួរ៖</strong> ${r.q}</p>
+        <p><strong>ចម្លើយរបស់អ្នក៖</strong> <span style="color:${r.isCorrect ? '#86efac' : '#fca5a5'}">${r.chosen}</span></p>
+        <p><strong>ចម្លើយត្រឹមត្រូវ៖</strong> <span style="color:#86efac">${r.correctText}</span></p>
+        <p><strong>ការពន្យល់គ្លីនិក & ជីវគីមី៖</strong> ${r.why}</p>
+      </details>
+    `).join('');
+}
+
+window.onload = initQuiz;
+</script>
+</body>
+</html>
